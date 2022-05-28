@@ -20,8 +20,6 @@ module.exports = class LoginRouter {
 
     this.authUseCaseSpy.auth(email, password)
 
-    return {
-      statusCode: 401
-    }
+    return HttpResponse.unauthorizedError()
   }
 }

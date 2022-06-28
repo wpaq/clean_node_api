@@ -3,12 +3,12 @@ const AuthUseCase = require('./auth-usecase')
 
 const makeEncrypter = () => {
   class EncrypterSpy {
-    async compare(password, hashedPassword) {
+    async compare (password, hashedPassword) {
       this.password = password
       this.hashedPassword = hashedPassword
       return this.isValid
     }
-  } 
+  }
   const encrypterSpy = new EncrypterSpy()
   encrypterSpy.isValid = true
   return encrypterSpy
@@ -16,20 +16,20 @@ const makeEncrypter = () => {
 
 const makeEncrypterWithError = () => {
   class EncrypterSpy {
-    async compare() {
+    async compare () {
       throw new Error()
     }
-  } 
+  }
   return new EncrypterSpy()
 }
 
 const makeTokenGenerator = () => {
   class TokenGeneratorSpy {
-    async generate(userId) {
+    async generate (userId) {
       this.userId = userId
       return this.accessToken
     }
-  } 
+  }
   const tokenGeneratorSpy = new TokenGeneratorSpy()
   tokenGeneratorSpy.accessToken = 'any_token'
   return tokenGeneratorSpy
@@ -37,10 +37,10 @@ const makeTokenGenerator = () => {
 
 const makeTokenGeneratorWithError = () => {
   class TokenGeneratorSpy {
-    async generate() {
+    async generate () {
       throw new Error()
     }
-  } 
+  }
   return new TokenGeneratorSpy()
 }
 
@@ -71,7 +71,7 @@ const makeLoadUserByEmailRepositoryWithError = () => {
 const makeUpdatedAccessTokenRepository = () => {
   class UpdatedAccessTokenRepositorySpy {
     async update (userId, accessToken) {
-      this.userId = userId,
+      this.userId = userId
       this.accessToken = accessToken
     }
   }
@@ -92,10 +92,10 @@ const makeSut = () => {
   const loadUserByEmailRepositorySpy = makeLoadUserByEmailRepository()
   const tokenGeneratorSpy = makeTokenGenerator()
   const updatedAccessTokenRepositorySpy = makeUpdatedAccessTokenRepository()
- 
+
   const sut = new AuthUseCase({
-    loadUserByEmailRepository: loadUserByEmailRepositorySpy, 
-    encrypter: encrypterSpy, 
+    loadUserByEmailRepository: loadUserByEmailRepositorySpy,
+    encrypter: encrypterSpy,
     tokenGenerator: tokenGeneratorSpy,
     updatedAccessTokenRepository: updatedAccessTokenRepositorySpy
   })
@@ -174,50 +174,50 @@ describe('Auth UseCase', () => {
     const encrypter = makeEncrypter()
     const tokenGenerator = makeTokenGenerator()
     const suts = [].concat(
-        new AuthUseCase(),
-        new AuthUseCase({
-          loadUserByEmailRepository: null,
-          encrypter: null,
-          tokenGenerator: null
-        }),
-        new AuthUseCase({ 
-          loadUserByEmailRepository: invalid,
-          encrypter: null,
-          tokenGenerator: null
-        }),
-        new AuthUseCase({
-          loadUserByEmailRepository,
-          encrypter: null,
-          tokenGenerator: null
-        }),
-        new AuthUseCase({
-          loadUserByEmailRepository,
-          encrypter: invalid,
-          tokenGenerator: null
-        }),
-        new AuthUseCase({
-          loadUserByEmailRepository,
-          encrypter,
-          tokenGenerator: null
-        }),
-        new AuthUseCase({
-          loadUserByEmailRepository,
-          encrypter,
-          tokenGenerator: invalid
-        }),
-        new AuthUseCase({
-          loadUserByEmailRepository,
-          encrypter,
-          tokenGenerator,
-          updatedAccessTokenRepository: null
-        }),
-        new AuthUseCase({
-          loadUserByEmailRepository,
-          encrypter,
-          tokenGenerator,
-          updatedAccessTokenRepository: invalid
-        }),
-      )
+      new AuthUseCase(),
+      new AuthUseCase({
+        loadUserByEmailRepository: null,
+        encrypter: null,
+        tokenGenerator: null
+      }),
+      new AuthUseCase({
+        loadUserByEmailRepository: invalid,
+        encrypter: null,
+        tokenGenerator: null
+      }),
+      new AuthUseCase({
+        loadUserByEmailRepository,
+        encrypter: null,
+        tokenGenerator: null
+      }),
+      new AuthUseCase({
+        loadUserByEmailRepository,
+        encrypter: invalid,
+        tokenGenerator: null
+      }),
+      new AuthUseCase({
+        loadUserByEmailRepository,
+        encrypter,
+        tokenGenerator: null
+      }),
+      new AuthUseCase({
+        loadUserByEmailRepository,
+        encrypter,
+        tokenGenerator: invalid
+      }),
+      new AuthUseCase({
+        loadUserByEmailRepository,
+        encrypter,
+        tokenGenerator,
+        updatedAccessTokenRepository: null
+      }),
+      new AuthUseCase({
+        loadUserByEmailRepository,
+        encrypter,
+        tokenGenerator,
+        updatedAccessTokenRepository: invalid
+      })
+    )
     for (const sut of suts) {
       const promise = sut.auth('any_email@mail.com', 'any_password')
       expect(promise).rejects.toThrow()
@@ -229,25 +229,25 @@ describe('Auth UseCase', () => {
     const encrypter = makeEncrypter()
     const tokenGenerator = makeTokenGenerator()
     const suts = [].concat(
-        new AuthUseCase({
-          loadUserByEmailRepository: makeLoadUserByEmailRepositoryWithError()
-        }),
-        new AuthUseCase({
-          loadUserByEmailRepository,
-          encrypter: makeEncrypterWithError()
-        }),
-        new AuthUseCase({
-          loadUserByEmailRepository,
-          encrypter,
-          tokenGenerator: makeTokenGeneratorWithError()
-        }),
-        new AuthUseCase({
-          loadUserByEmailRepository,
-          encrypter,
-          tokenGenerator,
-          updatedAccessTokenRepository: makeUpdatedAccessTokenRepositoryWithError()
-        })
-      )
+      new AuthUseCase({
+        loadUserByEmailRepository: makeLoadUserByEmailRepositoryWithError()
+      }),
+      new AuthUseCase({
+        loadUserByEmailRepository,
+        encrypter: makeEncrypterWithError()
+      }),
+      new AuthUseCase({
+        loadUserByEmailRepository,
+        encrypter,
+        tokenGenerator: makeTokenGeneratorWithError()
+      }),
+      new AuthUseCase({
+        loadUserByEmailRepository,
+        encrypter,
+        tokenGenerator,
+        updatedAccessTokenRepository: makeUpdatedAccessTokenRepositoryWithError()
+      })
+    )
     for (const sut of suts) {
       const promise = sut.auth('any_email@mail.com', 'any_password')
       expect(promise).rejects.toThrow()

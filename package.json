@@ -7,10 +7,10 @@
   "license": "ISC",
   "scripts": {
     "start": "node src/main/index.js",
-    "test": "jest --colors --noStackTrace --passWithNoTests --runInBand",
+    "test": "jest --colors --noStackTrace --passWithNoTests --runInBand --detectOpenHandles",
     "test:unit": "npm test -- --watch -c jest-unit-config.js",
     "test:integration": "npm test -- --watch -c jest-integration-config.js",
-    "test:staged": "npm test -- --findRelatedTests --silent",
+    "test:staged": "npm test -- --silent",
     "test:ci": "npm test -- --coverage --silent",
     "prepare": "husky install"
   },
